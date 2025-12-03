@@ -73,7 +73,7 @@ const handleSubmitIdea = () => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  width: min(620px, 100%);
+  width: min(520px, 100%);
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
@@ -130,7 +130,6 @@ h1 {
   font-size: clamp(2.5rem, 6vw, 4rem);
   margin: 0 0 0.75rem;
   color: #181759;
-  white-space: nowrap;
 }
 
 p {
@@ -195,8 +194,8 @@ p {
   .landing__input-wrapper {
     flex-direction: column;
     border-radius: 28px;
-    padding: 1rem;
-    width: 100%;
+    padding: 0.85rem 1rem;
+    width: min(340px, 100%);
   }
 
   .landing__input-button {
@@ -206,6 +205,10 @@ p {
 
   .landing {
     padding: 3rem 1.25rem 2.5rem;
+  }
+
+  h1 {
+    font-size: 2.2rem;
   }
 }
 </style>

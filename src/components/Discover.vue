@@ -29,6 +29,8 @@ import profileOne from '../assets/profiles/1.jpg'
 import profileTwo from '../assets/profiles/2.jpg'
 import profileThree from '../assets/profiles/3.jpg'
 import profileFour from '../assets/profiles/4.jpg'
+import profileFive from '../assets/profiles/5.png'
+import profileSix from '../assets/profiles/6.png'
 
 import videoOne from '../assets/videos/1.mp4'
 import videoTwo from '../assets/videos/2.mp4'
@@ -126,6 +128,25 @@ const clientProfiles: ClientProfile[] = [
     description: 'Kuwait-based creator sharing camping, overland and off-road adventures.',
     instagramUrl: 'https://www.instagram.com/salehhamadah',
     avatarSrc: profileFour,
+  },
+  {
+    name: 'Kuwaiti Offroad',
+    label: 'Salem R AlAmeeri · Offshore & Offroad',
+    followers: '145K',
+    meta: 'Marina · GARMIN Ambassador',
+    description: 'Offshore, overland, and off-road adventures with a focus on Kuwait and the wider region.',
+    instagramUrl: 'https://www.instagram.com/kuwaiti_offroad',
+    avatarSrc: profileFive,
+  },
+  {
+    name: 'Wyana Travels',
+    label: 'Wyana Travels · Tourism & Travel',
+    followers: '140K',
+    meta: 'IATA: 42231184 · Kuwait City',
+    description:
+      'Kuwaiti-managed travel agency booking trips to destinations around the world with tailored itineraries.',
+    instagramUrl: 'https://www.instagram.com/wyanatravels',
+    avatarSrc: profileSix,
   },
 ]
 
@@ -751,7 +772,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 .clients__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
   align-items: stretch;
 }
@@ -894,6 +915,10 @@ const handleKeydown = (event: KeyboardEvent) => {
     align-items: flex-start;
     gap: 1rem;
   }
+
+  .clients__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (min-width: 901px) {
@@ -909,12 +934,26 @@ const handleKeydown = (event: KeyboardEvent) => {
 }
 
 @media (max-width: 640px) {
+  .discover {
+    padding: 2rem 2rem 2.75rem;
+    gap: 1.5rem;
+  }
+
   .graphic-showcase {
-    padding: 2rem;
+    padding: 1.5rem 1.25rem;
+    border-radius: 18px;
+  }
+
+  .graphic-showcase__header {
+    margin-bottom: 1.25rem;
   }
 
   .showcase-slider__panel {
     grid-template-columns: 1fr;
+  }
+
+  .graphic-card img {
+    height: 220px;
   }
 
   .slider-controls {
@@ -927,6 +966,21 @@ const handleKeydown = (event: KeyboardEvent) => {
 
   .slider-button--floating {
     display: inline-flex;
+  }
+
+  .video-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+
+  .clients {
+    padding: 1.75rem 1.25rem;
+    border-radius: 18px;
+    margin-top: 1.75rem;
+  }
+
+  .clients__grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

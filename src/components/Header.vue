@@ -333,41 +333,56 @@ onBeforeUnmount(() => {
 
 @media (max-width: 900px) {
   .navbar__inner {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 0.75rem;
   }
 
   .navbar__menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: min(320px, 80vw);
-    height: 100vh;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 1.75rem 2rem 2rem;
-    gap: 1rem;
-    background: linear-gradient(180deg, #fdfefe 0%, #f4f7ff 100%);
-    box-shadow: -12px 0 35px rgba(15, 23, 42, 0.18);
-    transform: translateX(100%);
-    transition: transform 200ms ease;
+    position: absolute;
+    top: 100%;
+    left: 45%;
+    width: min(320px, 88vw);
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: minmax(38px, auto);
+    justify-items: center;
+    padding: 0.85rem 1.25rem 1.2rem;
+    row-gap: 0.45rem;
+    column-gap: 2.5rem;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 16px 35px rgba(15, 23, 42, 0.18);
+    transform: translate(-50%, -12px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 180ms ease, opacity 180ms ease;
     z-index: 25;
-    border-top-left-radius: 28px;
-    border-bottom-left-radius: 28px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
     border-left: 1px solid rgba(10, 30, 60, 0.06);
+    border-right: 1px solid rgba(10, 30, 60, 0.06);
+    border-bottom: 1px solid rgba(10, 30, 60, 0.06);
   }
 
   .navbar__menu--open {
-    transform: translateX(0);
+    transform: translate(-50%, 0);
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .navbar__menu a {
     width: 100%;
-    padding: 0.3rem 0;
+    padding: 0.2rem 0.75rem;
     font-size: 1.05rem;
     color: #0b1c33;
+    text-align: left;
+    justify-self: flex-start;
+  }
+
+  .navbar__menu a:nth-child(2n) {
+    text-align: right;
+    justify-self: flex-end;
   }
 
   .navbar__menu a::after {
@@ -381,28 +396,31 @@ onBeforeUnmount(() => {
 
   .navbar__toggle {
     display: flex;
+    margin-right: 2rem;
   }
 
   .navbar__close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    display: none;
   }
 
   .navbar__menu::before {
     content: 'Menu';
-    font-size: 0.75rem;
-    letter-spacing: 0.25em;
+    grid-column: 1 / -1;
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
     color: #7b8aa1;
-    margin-bottom: 0.5rem;
+    justify-self: center;
+    margin-bottom: 0.25rem;
   }
 
   .navbar__menu .navbar__cta--inline {
     display: inline-flex;
     width: 100%;
+    max-width: 260px;
     justify-content: center;
-    margin-top: 1.5rem;
+    margin: 1rem auto 0;
+    grid-column: 1 / -1;
   }
 
   .navbar__cta {
