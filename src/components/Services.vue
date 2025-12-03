@@ -56,6 +56,17 @@ const services = [
         <p>{{ service.description }}</p>
       </article>
     </div>
+
+    <div class="services__extra">
+      <article class="service-card service-card--extra">
+        <span class="service-card__icon">💻</span>
+        <h3>Web Development</h3>
+        <p>
+          Modern, responsive websites that bring your brand, content, and visuals together into one
+          seamless experience.
+        </p>
+      </article>
+    </div>
   </section>
 </template>
 
@@ -100,6 +111,13 @@ const services = [
   gap: 1.5rem;
 }
 
+.services__extra {
+  max-width: 1100px;
+  margin: 2.5rem auto 0;
+  display: flex;
+  justify-content: center;
+}
+
 .service-card {
   background: #ffffff;
   border-radius: 22px;
@@ -110,6 +128,11 @@ const services = [
   flex-direction: column;
   gap: 1rem;
   transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+.service-card--extra {
+  max-width: 360px;
+  width: 100%;
 }
 
 .service-card:hover {
@@ -136,6 +159,10 @@ const services = [
   .services__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .services__extra {
+    margin-top: 2rem;
+  }
 }
 
 @media (max-width: 640px) {
@@ -145,6 +172,10 @@ const services = [
 
   .services__grid {
     grid-template-columns: 1fr;
+  }
+
+  .services__extra {
+    margin-top: 2rem;
   }
 
   .service-card {

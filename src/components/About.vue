@@ -117,7 +117,9 @@ const profiles = [
 }
 
 .about-card {
-  background: #050a18;
+  background-image: url('../assets/b.jpg');
+  background-size: cover;
+  background-position: center;
   border: 1px solid rgba(24, 23, 89, 0.35);
   border-radius: 24px;
   padding: 1.75rem;
@@ -125,7 +127,8 @@ const profiles = [
   flex-direction: column;
   gap: 0.85rem;
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-  box-shadow: 0 25px 60px rgba(5, 10, 24, 0.4);
+  box-shadow: 0 25px 60px rgba(5, 10, 24, 0.25);
+  color: #1c2470;
 }
 
 .about-card:hover {
@@ -136,7 +139,7 @@ const profiles = [
 
 .about-card__label {
   font-weight: 600;
-  color: rgb(93, 246, 63);
+  color: #1c2470;
   margin: 0;
 }
 
@@ -144,13 +147,13 @@ blockquote {
   margin: 0;
   font-size: 1rem;
   line-height: 1.6;
-  color: #fefefe;
+  color: #1c2470;
 }
 
 .about-card__body {
   margin: 0;
   font-size: 0.95rem;
-  color: #d5e1ff;
+  color: #1c2470;
 }
 
 .about__profiles {
@@ -162,7 +165,9 @@ blockquote {
 }
 
 .profile-card {
-  background: #050a18;
+  background-image: url('../assets/b.jpg');
+  background-size: cover;
+  background-position: center;
   border: 1px solid rgba(24, 23, 89, 0.35);
   border-radius: 22px;
   padding: 1.5rem;
@@ -172,7 +177,8 @@ blockquote {
   align-items: center;
   text-align: center;
   transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
-  box-shadow: 0 18px 40px rgba(5, 10, 24, 0.35);
+  box-shadow: 0 18px 40px rgba(5, 10, 24, 0.25);
+  color: #1c2470;
 }
 
 .profile-card:hover {
@@ -196,7 +202,7 @@ blockquote {
 
 .profile-card__role {
   margin: 0;
-  color: #9fb3d8;
+  color: #1c2470;
   font-size: 0.95rem;
 }
 

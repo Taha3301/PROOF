@@ -33,9 +33,7 @@
         <section>
           <h3>Follow us</h3>
           <div class="footer__social">
-            <a href="https://www.linkedin.com" target="_blank" rel="noreferrer">LinkedIn</a>
-            <a href="https://www.instagram.com" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="https://www.youtube.com" target="_blank" rel="noreferrer">YouTube</a>
+            <a href="https://www.instagram.com/proof.agency1/" target="_blank" rel="noreferrer">Instagram</a>
           </div>
         </section>
       </div>

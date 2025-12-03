@@ -1,8 +1,34 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const ideaText = ref('')
+const emit = defineEmits<{
+  (e: 'submit-idea', idea: string): void
+}>()
+
+const handleSubmitIdea = () => {
+  const trimmed = ideaText.value.trim()
+  if (!trimmed) {
+    return
+  }
+  emit('submit-idea', trimmed)
+  ideaText.value = ''
+}
+</script>
+
 <template>
   <section id="accueil" class="landing">
     <div class="landing__overlay">
-      <div class="landing__media">
-        <img src="../assets/image.svg" alt="Proof Agency illustration" />
+      <div class="landing__input-wrapper">
+        <input
+          type="text"
+          class="landing__input"
+          placeholder="Describe your next bold idea…"
+          aria-label="Describe your next bold idea"
+          v-model="ideaText"
+          @keyup.enter="handleSubmitIdea"
+        />
+        <button type="button" class="landing__input-button" @click="handleSubmitIdea">Send my idea</button>
       </div>
       <div class="landing__content">
         <h1>Welcome to Proof Agency</h1>
@@ -20,58 +46,91 @@
 
 <style scoped>
 .landing {
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 120px);
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: clamp(3rem, 10vw, 5rem) 1.5rem 3rem;
+  background: inherit;
+  background-size: inherit;
+  background-position: inherit;
+  background-attachment: inherit;
 }
 
 .landing__overlay {
-  width: 100%;
-  height: 100%;
+  width: min(960px, 100%);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
-  padding: 4rem 2rem;
-  transform: translateY(-2cm);
-}
-
-.landing__media {
-  flex: 1;
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: clamp(2rem, 5vw, 3rem);
+  padding: 0 1rem;
+  background: transparent;
 }
 
-.landing__media img {
-  width: 100%;
-  max-width: 420px;
-  height: auto;
-  filter: drop-shadow(0 18px 28px rgba(0, 0, 0, 0.18));
-  border-radius: 24px;
-  transform: perspective(900px) rotateY(-6deg);
-  animation: floaty 7s ease-in-out infinite;
-  transition: transform 0.6s ease, filter 0.6s ease;
+.landing__input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: min(620px, 100%);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  padding: 0.65rem 0.65rem 0.65rem 1.25rem;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 12px 30px rgba(5, 12, 27, 0.35);
 }
 
-.landing__media img:hover {
-  transform: perspective(900px) rotateY(0deg) translateY(-6px) scale(1.02);
-  filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.22));
+.landing__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #f8fbff;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.landing__input::placeholder {
+  color: rgba(248, 251, 255, 0.8);
+}
+
+.landing__input-button {
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #23d86c, #53ff65);
+  color: #04121d;
+  font-weight: 600;
+  padding: 0.6rem 1.75rem;
+  cursor: pointer;
+  box-shadow: 0 12px 24px rgba(35, 216, 108, 0.35);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.landing__input-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(35, 216, 108, 0.45);
 }
 
 .landing__content {
   flex: 1;
+  width: 100%;
   max-width: 640px;
   color: #f8fbff;
-  text-align: left;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
 }
 
 h1 {
   font-size: clamp(2.5rem, 6vw, 4rem);
-  margin-bottom: 1rem;
+  margin: 0 0 0.75rem;
   color: #181759;
+  white-space: nowrap;
 }
 
 p {
@@ -81,12 +140,13 @@ p {
 }
 
 .landing__lead {
-  font-size: 1.35rem;
-  font-weight: 500;
+  font-size: clamp(1.2rem, 3vw, 1.45rem);
+  font-weight: 600;
+  margin: 0;
 }
 
 .landing__slogan {
-  margin-top: 1.5rem;
+  margin-top: 0.3rem;
   font-size: 1rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -123,13 +183,29 @@ p {
 
 @media (max-width: 900px) {
   .landing__overlay {
-    flex-direction: column;
-    padding: 3rem 1.5rem;
-    transform: translateY(-1cm);
+    padding: 0;
   }
 
   .landing__content {
     text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .landing__input-wrapper {
+    flex-direction: column;
+    border-radius: 28px;
+    padding: 1rem;
+    width: 100%;
+  }
+
+  .landing__input-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .landing {
+    padding: 3rem 1.25rem 2.5rem;
   }
 }
 </style>

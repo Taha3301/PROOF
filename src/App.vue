@@ -10,6 +10,7 @@ import Footer from './components/Footer.vue'
 
 type SectionView = 'all' | 'contact' | 'discover'
 const visibleSection = ref<SectionView>('all')
+const pendingIdeaMessage = ref('')
 
 const handleShowContact = () => {
   visibleSection.value = 'contact'
@@ -21,6 +22,11 @@ const handleShowDiscover = () => {
 
 const handleShowAll = () => {
   visibleSection.value = 'all'
+}
+
+const handleIdeaSubmit = (idea: string) => {
+  pendingIdeaMessage.value = idea
+  handleShowContact()
 }
 
 const isFullView = computed(() => visibleSection.value === 'all')
@@ -52,11 +58,11 @@ onBeforeUnmount(() => {
       @show-all="handleShowAll"
     />
     <main class="content" :class="{ 'content--no-gap': !isFullView }">
-      <LandingPage v-show="isFullView" />
+      <LandingPage v-show="isFullView" @submit-idea="handleIdeaSubmit" />
       <Services v-show="isFullView" />
       <About v-show="isFullView" />
       <Discover v-if="visibleSection === 'discover'" />
-      <Contact v-if="visibleSection === 'contact'" />
+      <Contact v-if="visibleSection === 'contact'" :initial-message="pendingIdeaMessage" />
     </main>
     <Footer />
     <button
@@ -78,20 +84,26 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .layout {
+  --header-height: 96px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  background-image: url('./assets/b.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .content {
   flex: 1;
-  padding-top: 80px;
+  padding-top: var(--header-height);
+  background: transparent;
 }
 
 .content--no-gap {
-  padding-top: 0;
+  padding-top: var(--header-height);
 }
 
 .scroll-top {
@@ -121,5 +133,25 @@ onBeforeUnmount(() => {
 .scroll-top svg {
   width: 22px;
   height: 22px;
+}
+</style>
+
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-image: url('./assets/b.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-color: #ffffff;
+}
+
+#app {
+  min-height: 100%;
+  background: transparent;
 }
 </style>

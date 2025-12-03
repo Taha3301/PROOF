@@ -1,3 +1,33 @@
+<script setup lang="ts">
+import { reactive, watch } from 'vue'
+
+const props = defineProps<{
+  initialMessage?: string
+}>()
+
+const form = reactive({
+  name: '',
+  email: '',
+  details: '',
+})
+
+watch(
+  () => props.initialMessage,
+  (value) => {
+    if (typeof value === 'string' && value.trim()) {
+      form.details = value
+    }
+  },
+  { immediate: true },
+)
+
+const handleSubmit = () => {
+  // Placeholder submit handler
+  // In a real app you would send this to an API
+  console.log('Submitting contact form', { ...form })
+}
+</script>
+
 <template>
   <section id="contact" class="contact">
     <div class="contact__intro">
@@ -31,18 +61,23 @@
 
       <div class="contact__card">
         <h3>Start a project</h3>
-        <form class="contact__form">
+        <form class="contact__form" @submit.prevent="handleSubmit">
           <label>
             Name
-            <input type="text" placeholder="Jane Doe" required />
+            <input type="text" placeholder="Jane Doe" v-model="form.name" required />
           </label>
           <label>
             Email
-            <input type="email" placeholder="jane@brand.com" required />
+            <input type="email" placeholder="jane@brand.com" v-model="form.email" required />
           </label>
           <label>
             Project details
-            <textarea rows="5" placeholder="Tell us about timelines, scope, goals…" required></textarea>
+            <textarea
+              rows="5"
+              placeholder="Tell us about timelines, scope, goals…"
+              v-model="form.details"
+              required
+            ></textarea>
           </label>
           <button type="submit">Send inquiry</button>
         </form>

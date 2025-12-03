@@ -4,6 +4,7 @@ import proofLogo from '../assets/lOGO-PNG.png'
 
 const isScrolled = ref(false)
 const isMenuOpen = ref(false)
+const shouldHideNav = ref(false)
 const emit = defineEmits(['show-contact', 'show-discover', 'show-all'])
 
 const closeMenu = () => {
@@ -42,7 +43,9 @@ const handleDiscoverClick = () => {
 }
 
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 50
+  const offset = window.scrollY
+  isScrolled.value = offset > 50
+  shouldHideNav.value = offset > 150
 }
 
 const toggleMenu = () => {
@@ -73,7 +76,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header class="navbar" :class="{ 'navbar--scrolled': isScrolled }">
+  <header class="navbar" :class="{ 'navbar--scrolled': isScrolled, 'navbar--hidden': shouldHideNav }">
     <div class="navbar__inner">
       <img
         :src="proofLogo"
@@ -129,11 +132,11 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-:global(body) {
+::global(body) {
   margin: 0;
   font-family: 'Inter', 'Space Grotesk', system-ui, -apple-system, sans-serif;
   color: #0f172a;
-  background: #f4f6fb;
+  background: transparent;
 }
 
 :global(html) {
@@ -141,27 +144,43 @@ onBeforeUnmount(() => {
 }
 
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 20;
+  left: 0;
+  z-index: 30;
   width: 100%;
-  background: #f1f1f3;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.1);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
-  transition: background 200ms ease, box-shadow 200ms ease, opacity 200ms ease;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  box-shadow: none;
+  opacity: 1;
+  transition:
+    background 300ms ease,
+    box-shadow 300ms ease,
+    border-color 300ms ease,
+    transform 250ms ease,
+    opacity 250ms ease;
 }
 
 .navbar--scrolled {
-  background: #e1e1e5;
-  opacity: 0.95;
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 1;
   box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+}
+
+.navbar--hidden {
+  transform: translateY(-130%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .navbar__inner {
   position: relative;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0.75rem 2rem;
+  padding: 0.9rem clamp(1.25rem, 4vw, 2.75rem);
   display: flex;
   align-items: center;
   gap: 2rem;
@@ -171,7 +190,7 @@ onBeforeUnmount(() => {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.9rem;
 }
 
 .navbar__logo {
@@ -184,7 +203,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex: 1;
   justify-content: center;
-  gap: 1.75rem;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
   font-size: 0.98rem;
   color: #0f172a;
   font-weight: 500;
@@ -194,7 +213,7 @@ onBeforeUnmount(() => {
   position: relative;
   text-decoration: none;
   color: inherit;
-  padding: 0.4rem 0;
+  padding: 0.35rem 0;
   transition: color 150ms ease;
 }
 
