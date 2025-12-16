@@ -24,7 +24,7 @@ const isValidEmail = (value: string) => {
   return emailPattern.test(value.trim())
 }
 
-const apiUrl = (import.meta.env.VITE_CONTACT_API || '/api/contact').trim()
+const apiUrl = (import.meta.env.VITE_CONTACT_API || 'https://proof.xo.je/contact.php').trim()
 
 watch(
   () => props.initialMessage,

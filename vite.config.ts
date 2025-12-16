@@ -8,9 +8,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/contact': {
-        target: 'http://localhost',
+        target: 'https://proof.xo.je',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/contact/, '/email.php'),
+        rewrite: (path) => path.replace(/^\/api\/contact/, '/contact.php'),
       },
     },
   },
