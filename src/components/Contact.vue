@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue'
+import emailjs from '@emailjs/browser'
 
 const props = defineProps<{
   initialMessage?: string
@@ -24,7 +25,10 @@ const isValidEmail = (value: string) => {
   return emailPattern.test(value.trim())
 }
 
-const apiUrl = (import.meta.env.VITE_CONTACT_API || 'https://proof.xo.je/contact.php').trim()
+// EmailJS configuration
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_5ur1ohk'
+const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'template_k2pk4uq'
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'u4dUw2xE3KxyH9YfN'
 
 watch(
   () => props.initialMessage,
@@ -54,21 +58,20 @@ const handleSubmit = async () => {
       return
     }
 
-    const payload = {
-      ...form,
+    const templateParams = {
+      from_name: form.name,
+      from_email: form.email,
       subject: form.subject || 'Website inquiry',
+      whatsapp: form.whatsapp || 'Not provided',
+      message: form.details,
     }
 
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-
-    const result = await response.json().catch(() => ({}))
-    if (!response.ok || result.ok === false) {
-      throw new Error(result.message || 'Unable to send message right now. Please try again.')
-    }
+    await emailjs.send(
+      EMAILJS_SERVICE_ID,
+      EMAILJS_TEMPLATE_ID,
+      templateParams,
+      EMAILJS_PUBLIC_KEY
+    )
 
     state.success = 'Thanks! Your message was sent.'
     form.name = ''
@@ -77,7 +80,8 @@ const handleSubmit = async () => {
     form.whatsapp = ''
     form.details = ''
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Something went wrong.'
+    console.error('EmailJS error:', error)
+    const message = error instanceof Error ? error.message : 'Unable to send message right now. Please try again.'
     state.error = message
   } finally {
     state.loading = false
