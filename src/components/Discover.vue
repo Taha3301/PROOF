@@ -36,6 +36,9 @@ import videoOne from '../assets/videos/1.mp4'
 import videoTwo from '../assets/videos/2.mp4'
 import videoThree from '../assets/videos/افتتاح مبهر كعادتهم 🇶🇦♥️.mp4'
 import videoFour from '../assets/videos/__جاري كتابة التاريخ في قطر 🇶🇦 في افتتاح كأس العرب ٢٠٢٥_@roadtoqatar_@arabcupqa_qa_.mp4'
+import interviewOne from '../assets/interviews/SaveClip.App_AQNjnjdT5zQUv46fJo3kqabIxU2PL7o5rmvYW17Dt2TCqnvy0a9k63e52L4V5WiuJwo0L3xcaCpXjh9-LN8nT_s8IjLl1krNwi0gYzQ.mp4'
+import motionOne from '../assets/motion graphics/SaveClip.App_AQPE4oXaBsTmy0pu7-2eoRLPG7Rl6eMARqmWWTjVrjC2da-ugKMh_LF4gy_0P8e5khKUaPEr4reD6lzLtdEI0cDLQsPDOTEAQy1YJe8.mp4'
+import ugcOne from '../assets/UGC/SaveClip.App_AQPyIaRdS5-Y_RwFuDuhVKZ9z6pGnkctu6peM8W867U8ZPihWmWNq99H2njqM0Sv9EQ3M_qhEvSMBsrQ4iYsPeaNX_5YQEsHsnKyZEo.mp4'
 
 type ShowcaseItem = {
   src: string
@@ -44,9 +47,12 @@ type ShowcaseItem = {
   variant?: 'story'
 }
 
+type VideoKind = 'ugc' | 'motion' | 'interview' | 'reel'
+
 type VideoItem = {
   src: string
   title: string
+  kind: VideoKind
 }
 
 type ClientProfile = {
@@ -154,19 +160,38 @@ const AUTOPLAY_DELAY = 6000
 const BREAKPOINT_SM = 640
 const BREAKPOINT_MD = 900
 
+const videoCategories: { key: VideoKind; label: string }[] = [
+  { key: 'ugc', label: 'UGC' },
+  { key: 'motion', label: 'Motion graphics' },
+  { key: 'interview', label: 'Interviews' },
+  { key: 'reel', label: 'Reels' },
+]
+
 const videoItems: VideoItem[] = [
-  { src: videoOne, title: 'Campaign Reel — Showreel 01' },
-  { src: videoTwo, title: 'Social Cutdowns — Showreel 02' },
-  { src: videoThree, title: 'Qatar Event Highlight' },
-  { src: videoFour, title: 'Arab Cup 2025 Opening' },
+  { src: videoOne, title: 'Campaign Reel — Showreel 01', kind: 'reel' },
+  { src: videoTwo, title: 'Social Cutdowns — Showreel 02', kind: 'reel' },
+  { src: videoThree, title: 'Qatar Event Highlight', kind: 'reel' },
+  { src: videoFour, title: 'Arab Cup 2025 Opening', kind: 'reel' },
+  { src: ugcOne, title: 'UGC Showcase 01', kind: 'ugc' },
+  { src: motionOne, title: 'Motion Graphics 01', kind: 'motion' },
+  { src: interviewOne, title: 'Interview Sample 01', kind: 'interview' },
 ]
 
 const activeShowcaseTab = ref<'graphics' | 'videos'>('graphics')
+const activeVideoCategory = ref<VideoKind>('reel')
 
 const allShowcaseItems = computed(() => [
   ...posterShowcase,
   ...storyShowcase.map((item) => ({ ...item, variant: 'story' as const })),
 ])
+
+const filteredVideos = computed(() =>
+  videoItems.filter((item) => item.kind === activeVideoCategory.value),
+)
+
+const videoGridClass = computed(() =>
+  activeVideoCategory.value === 'reel' ? '' : 'video-grid--compact',
+)
 
 const viewportWidth = ref(typeof window !== 'undefined' ? window.innerWidth : 1200)
 
@@ -375,19 +400,41 @@ const handleKeydown = (event: KeyboardEvent) => {
         </div>
       </div>
 
-      <div v-else class="video-grid">
-        <figure v-for="video in videoItems" :key="video.title" class="video-card">
-          <video
-            class="video-card__media"
-            :src="video.src"
-            controls
-            playsinline
-            preload="metadata"
-          />
-          <figcaption class="video-card__caption">
-            {{ video.title }}
-          </figcaption>
-        </figure>
+      <div v-else class="video-section">
+        <div class="video-tabs" role="tablist" aria-label="Video categories">
+          <button
+            v-for="cat in videoCategories"
+            :key="cat.key"
+            type="button"
+            class="video-tab"
+            :class="{ 'video-tab--active': activeVideoCategory === cat.key }"
+            role="tab"
+            :aria-selected="activeVideoCategory === cat.key"
+            @click="activeVideoCategory = cat.key"
+          >
+            {{ cat.label }}
+          </button>
+        </div>
+
+        <div class="video-grid" :class="videoGridClass">
+          <figure
+            v-for="video in filteredVideos"
+            :key="video.title"
+            class="video-card"
+            :class="{ 'video-card--compact': video.kind !== 'reel' }"
+          >
+            <video
+              class="video-card__media"
+              :src="video.src"
+              controls
+              playsinline
+              preload="metadata"
+            />
+            <figcaption class="video-card__caption">
+              {{ video.title }}
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </div>
 
@@ -715,10 +762,53 @@ const handleKeydown = (event: KeyboardEvent) => {
   background: rgba(255, 255, 255, 0.3);
 }
 
+.video-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .video-grid {
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.25rem;
+  align-items: start;
+}
+
+.video-grid--compact {
+  max-width: 860px;
+  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  justify-items: center;
+}
+
+.video-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0 auto 0.25rem;
+  max-width: 520px;
+}
+
+.video-tab {
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  border-radius: 999px;
+  padding: 0.32rem 0.9rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 140ms ease, box-shadow 140ms ease, color 140ms ease, transform 140ms ease;
+}
+
+.video-tab--active {
+  background: #181759;
+  color: #ffffff;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+  transform: translateY(-1px);
 }
 
 .video-card {
@@ -728,6 +818,11 @@ const handleKeydown = (event: KeyboardEvent) => {
   background: #000000;
   box-shadow: 0 24px 60px rgba(15, 23, 42, 0.5);
   aspect-ratio: 9 / 16;
+}
+
+.video-card--compact {
+  max-width: 220px;
+  width: 100%;
 }
 
 .video-card__media {
@@ -907,7 +1002,14 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 
   .video-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .video-grid--compact {
+    max-width: 720px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
   }
 
   .graphic-showcase__header {
@@ -971,6 +1073,22 @@ const handleKeydown = (event: KeyboardEvent) => {
   .video-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
+  }
+
+  .video-grid--compact {
+    max-width: 520px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .video-tabs {
+    width: 100%;
+    gap: 0.4rem;
+  }
+
+  .video-tab {
+    flex: 1 1 calc(50% - 0.4rem);
+    text-align: center;
   }
 
   .clients {

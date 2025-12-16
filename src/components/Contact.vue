@@ -8,8 +8,23 @@ const props = defineProps<{
 const form = reactive({
   name: '',
   email: '',
+  subject: '',
+  whatsapp: '',
   details: '',
 })
+
+const state = reactive({
+  loading: false,
+  success: '',
+  error: '',
+})
+
+const isValidEmail = (value: string) => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailPattern.test(value.trim())
+}
+
+const apiUrl = (import.meta.env.VITE_CONTACT_API || '/api/contact').trim()
 
 watch(
   () => props.initialMessage,
@@ -21,10 +36,52 @@ watch(
   { immediate: true },
 )
 
-const handleSubmit = () => {
-  // Placeholder submit handler
-  // In a real app you would send this to an API
-  console.log('Submitting contact form', { ...form })
+const handleSubmit = async () => {
+  state.loading = true
+  state.success = ''
+  state.error = ''
+
+  try {
+    if (!form.name.trim() || !form.email.trim() || !form.details.trim()) {
+      state.error = 'Name, email, and project details are required.'
+      state.loading = false
+      return
+    }
+
+    if (!isValidEmail(form.email)) {
+      state.error = 'Please enter a valid email address.'
+      state.loading = false
+      return
+    }
+
+    const payload = {
+      ...form,
+      subject: form.subject || 'Website inquiry',
+    }
+
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+
+    const result = await response.json().catch(() => ({}))
+    if (!response.ok || result.ok === false) {
+      throw new Error(result.message || 'Unable to send message right now. Please try again.')
+    }
+
+    state.success = 'Thanks! Your message was sent.'
+    form.name = ''
+    form.email = ''
+    form.subject = ''
+    form.whatsapp = ''
+    form.details = ''
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Something went wrong.'
+    state.error = message
+  } finally {
+    state.loading = false
+  }
 }
 </script>
 
@@ -47,8 +104,8 @@ const handleSubmit = () => {
 
         <ul>
           <li><span>Email</span> <a href="mailto:contact@proofagency.com">contact@proofagency.com</a></li>
-          <li><span>Phone</span> +33 (0)1 84 88 90 45</li>
-          <li><span>Studio</span> 8 Rue de la République, Paris</li>
+          <li><span>Phone</span> +216 21 918 926</li>
+          <li><span>Studio</span> Djerba Houmt Souk, Tunisia</li>
         </ul>
 
         <div class="contact__chips">
@@ -71,6 +128,14 @@ const handleSubmit = () => {
             <input type="email" placeholder="jane@brand.com" v-model="form.email" required />
           </label>
           <label>
+            Subject
+            <input type="text" placeholder="Project or request topic" v-model="form.subject" />
+          </label>
+          <label>
+            WhatsApp (optional)
+            <input type="tel" placeholder="+1 555 000 0000" v-model="form.whatsapp" />
+          </label>
+          <label>
             Project details
             <textarea
               rows="5"
@@ -79,7 +144,11 @@ const handleSubmit = () => {
               required
             ></textarea>
           </label>
-          <button type="submit">Send inquiry</button>
+          <button type="submit" :disabled="state.loading">
+            {{ state.loading ? 'Sending…' : 'Send inquiry' }}
+          </button>
+          <p v-if="state.error" class="contact__status contact__status--error">{{ state.error }}</p>
+          <p v-if="state.success" class="contact__status contact__status--success">{{ state.success }}</p>
         </form>
       </div>
     </div>
@@ -179,6 +248,11 @@ button {
   cursor: pointer;
 }
 
+button[disabled] {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .contact__info ul {
   list-style: none;
   padding: 0;
@@ -211,6 +285,19 @@ button {
   border-radius: 999px;
   padding: 0.25rem 0.85rem;
   font-size: 0.85rem;
+}
+
+.contact__status {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.contact__status--error {
+  color: #d14343;
+}
+
+.contact__status--success {
+  color: #15803d;
 }
 </style>
 

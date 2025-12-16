@@ -5,4 +5,13 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   base: '/PROOF/',
   plugins: [vue()],
+  server: {
+    proxy: {
+      '/api/contact': {
+        target: 'http://localhost',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/contact/, '/email.php'),
+      },
+    },
+  },
 })

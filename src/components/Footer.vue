@@ -25,8 +25,8 @@
           <h3>Contact</h3>
           <ul>
             <li><a href="mailto:contact@proofagency.com">contact@proofagency.com</a></li>
-            <li>+33 (0)1 84 88 90 45</li>
-            <li>8 Rue de la République, 75001 Paris</li>
+            <li>+216 21 918 926</li>
+            <li>Djerba Houmt Souk, Tunisia</li>
           </ul>
         </section>
 
