@@ -30,18 +30,31 @@ const bottomHighlights = [
   },
 ]
 
+import montasarImg from '../assets/profile/montasar.jpeg'
+import ademImg from '../assets/profile/adem.jpeg'
+import tahaImg from '../assets/profile/taha.jpg'
+import marwenImg from '../assets/profile/marwen.jpg'
+
 const profiles = [
   {
-    name: 'Guedouer Montassar',
-    role: 'Creative Director',
-    image: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?auto=format&fit=facearea&w=400&h=400&q=80',
-    blurb: 'Leading multidisciplinary teams to turn abstract ideas into signature campaigns.',
+    name: 'Montassar Guedouar',
+    role: 'Founder & CEO',
+    image: montasarImg,
   },
   {
-    name: 'Adam',
-    role: 'Head of Production',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=facearea&w=400&h=400&q=80',
-    blurb: 'Crafting cinematic-grade visuals and scalable content systems for bold brands.',
+    name: 'Adem Dhahri',
+    role: 'Head of Video Production',
+    image: ademImg,
+  },
+  {
+    name: 'Marwen Dridi',
+    role: 'Art Director',
+    image: marwenImg,
+  },
+  {
+    name: 'Taha Daoud',
+    role: 'Head of Web Development',
+    image: tahaImg,
   },
 ]
 </script>
@@ -158,9 +171,9 @@ blockquote {
 
 .about__profiles {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
-  max-width: 700px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -206,6 +219,28 @@ blockquote {
   font-size: 0.95rem;
 }
 
+@media (max-width: 1200px) {
+  .about__profiles {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    /* Reset grid styles */
+    grid-template-columns: none;
+    max-width: 100%;
+  }
+
+  .profile-card {
+    min-width: 260px;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+}
+
 @media (max-width: 640px) {
   .about {
     padding: 4rem 1.5rem;
@@ -215,8 +250,7 @@ blockquote {
     grid-template-columns: 1fr;
   }
 
-  .about__grid--bottom,
-  .about__profiles {
+  .about__grid--bottom {
     grid-template-columns: 1fr;
   }
 }

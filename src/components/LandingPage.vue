@@ -4,6 +4,7 @@ import { ref } from 'vue'
 const ideaText = ref('')
 const emit = defineEmits<{
   (e: 'submit-idea', idea: string): void
+  (e: 'show-discover'): void
 }>()
 
 const handleSubmitIdea = () => {
@@ -19,6 +20,7 @@ const handleSubmitIdea = () => {
 <template>
   <section id="accueil" class="landing">
     <div class="landing__overlay">
+      <a href="#" @click.prevent="emit('show-discover')" class="landing__cta-mobile">Discover</a>
       <div class="landing__input-wrapper">
         <input
           type="text"
@@ -86,14 +88,16 @@ const handleSubmitIdea = () => {
   flex: 1;
   background: transparent;
   border: none;
-  color: #f8fbff;
+  color: #000000;
   font-size: 1rem;
   font-family: inherit;
   outline: none;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .landing__input::placeholder {
-  color: rgba(248, 251, 255, 0.8);
+  color: rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .landing__input-button {
@@ -153,6 +157,24 @@ p {
   animation: pulse 2.8s ease-in-out infinite;
 }
 
+.landing__cta-mobile {
+  display: none; /* Hidden by default */
+  text-decoration: none;
+  border-radius: 999px;
+  background: linear-gradient(120deg, #23d86c, #53ff65);
+  color: #04121d;
+  padding: 0.6rem 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  box-shadow: 0 10px 25px rgba(35, 216, 108, 0.25);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.landing__cta-mobile:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(35, 216, 108, 0.35);
+}
+
 @keyframes pulse {
   0% {
     opacity: 0.4;
@@ -187,6 +209,10 @@ p {
 
   .landing__content {
     text-align: center;
+  }
+  
+  .landing__cta-mobile {
+    display: inline-block; /* Show on mobile/tablet */
   }
 }
 

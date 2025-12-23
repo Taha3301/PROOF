@@ -58,7 +58,7 @@ onBeforeUnmount(() => {
       @show-all="handleShowAll"
     />
     <main class="content" :class="{ 'content--no-gap': !isFullView }">
-      <LandingPage v-show="isFullView" @submit-idea="handleIdeaSubmit" />
+      <LandingPage v-show="isFullView" @submit-idea="handleIdeaSubmit" @show-discover="handleShowDiscover" />
       <Services v-show="isFullView" />
       <About v-show="isFullView" />
       <Discover v-if="visibleSection === 'discover'" />
