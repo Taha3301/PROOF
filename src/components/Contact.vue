@@ -107,7 +107,7 @@ const handleSubmit = async () => {
         </div>
 
         <ul>
-          <li><span>Email</span> <a href="mailto:contact@proofagency.com">contact@proofagency.com</a></li>
+          <li><span>Email</span> <a href="mailto:contact@proofagency.tn">contact@proofagency.tn</a></li>
           <li><span>Phone</span> +216 21 918 926</li>
           <li><span>Studio</span> Djerba Houmt Souk, Tunisia</li>
         </ul>

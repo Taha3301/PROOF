@@ -24,7 +24,7 @@
         <section>
           <h3>Contact</h3>
           <ul>
-            <li><a href="mailto:contact@proofagency.com">contact@proofagency.com</a></li>
+            <li><a href="mailto:contact@proofagency.tn">contact@proofagency.tn</a></li>
             <li>+216 21 918 926</li>
             <li>Djerba Houmt Souk, Tunisia</li>
           </ul>
