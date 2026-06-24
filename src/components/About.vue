@@ -1,4 +1,20 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
+const sliderRef = ref<HTMLElement | null>(null)
+
+const scrollLeft = () => {
+  if (sliderRef.value) {
+    sliderRef.value.scrollBy({ left: -320, behavior: 'smooth' })
+  }
+}
+
+const scrollRight = () => {
+  if (sliderRef.value) {
+    sliderRef.value.scrollBy({ left: 320, behavior: 'smooth' })
+  }
+}
+
 const topHighlights = [
   {
     title: 'Who We Are',
@@ -30,6 +46,7 @@ const bottomHighlights = [
   },
 ]
 
+import rayenImg from '../assets/profile/rayen.jpeg'
 import montasarImg from '../assets/profile/montasar.jpeg'
 import ademImg from '../assets/profile/adem.jpeg'
 import tahaImg from '../assets/profile/taha.jpg'
@@ -38,8 +55,13 @@ import marwenImg from '../assets/profile/marwen.jpg'
 const profiles = [
   {
     name: 'Montassar Guedouar',
-    role: 'Founder & CEO',
+    role: 'Founder',
     image: montasarImg,
+  },
+  {
+    name: 'Guedouar Rayen',
+    role: 'CEO',
+    image: rayenImg,
   },
   {
     name: 'Adem Dhahri',
@@ -80,13 +102,26 @@ const profiles = [
         <p class="about-card__body">{{ item.body }}</p>
       </article>
     </div>
+    <div class="about__intro" style="margin-top: 5rem; margin-bottom: 2rem;">
+      <h2>Meet the Team</h2>
+    </div>
 
-    <div class="about__profiles">
-      <article v-for="profile in profiles" :key="profile.name" class="profile-card">
-        <img :src="profile.image" :alt="profile.name" loading="lazy" />
-        <h3>{{ profile.name }}</h3>
-        <p class="profile-card__role">{{ profile.role }}</p>
-      </article>
+    <div class="slider-container">
+      <button @click="scrollLeft" class="slider-btn slider-btn--left" aria-label="Previous profile">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <div class="about__profiles" ref="sliderRef">
+        <article v-for="profile in profiles" :key="profile.name" class="profile-card">
+          <img :src="profile.image" :alt="profile.name" loading="lazy" />
+          <h3>{{ profile.name }}</h3>
+          <p class="profile-card__role">{{ profile.role }}</p>
+        </article>
+      </div>
+
+      <button @click="scrollRight" class="slider-btn slider-btn--right" aria-label="Next profile">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
     </div>
   </section>
 </template>
@@ -169,81 +204,143 @@ blockquote {
   color: #1c2470;
 }
 
-.about__profiles {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+.slider-container {
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 4rem;
+}
+
+.about__profiles {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 1.5rem;
+  padding: 1.5rem 0.5rem 2rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+.about__profiles::-webkit-scrollbar {
+  display: none;
 }
 
 .profile-card {
+  min-width: 280px;
+  scroll-snap-align: center;
+  flex-shrink: 0;
   background-image: url('../assets/b.jpg');
   background-size: cover;
   background-position: center;
   border: 1px solid rgba(24, 23, 89, 0.35);
   border-radius: 22px;
-  padding: 1.5rem;
+  padding: 2.5rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1.25rem;
   align-items: center;
   text-align: center;
-  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
-  box-shadow: 0 18px 40px rgba(5, 10, 24, 0.25);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 300ms ease, border-color 300ms ease;
+  box-shadow: 0 15px 35px rgba(5, 10, 24, 0.2);
   color: #1c2470;
 }
 
 .profile-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-10px) scale(1.02);
   border-color: #181759;
-  box-shadow: 0 26px 55px rgba(24, 23, 89, 0.4);
+  box-shadow: 0 25px 50px rgba(24, 23, 89, 0.35);
 }
 
 .profile-card img {
-  width: 84px;
-  height: 84px;
+  width: 104px;
+  height: 104px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #181759;
+  border: 3px solid #181759;
+  box-shadow: 0 8px 20px rgba(24, 23, 89, 0.2);
 }
 
 .profile-card h3 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 .profile-card__role {
   margin: 0;
   color: #1c2470;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.slider-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid rgba(24, 23, 89, 0.2);
+  box-shadow: 0 8px 25px rgba(5, 10, 24, 0.15);
+  color: #181759;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 250ms ease;
+  z-index: 10;
+}
+
+.slider-btn:hover {
+  background: #181759;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 10px 30px rgba(24, 23, 89, 0.3);
+}
+
+.slider-btn svg {
+  transition: transform 250ms ease;
+}
+
+.slider-btn:hover svg {
+  transform: scale(1.15);
+}
+
+.slider-btn--left {
+  left: 0;
+}
+
+.slider-btn--right {
+  right: 0;
 }
 
 @media (max-width: 1200px) {
+  .slider-container {
+    padding: 0 3rem;
+  }
+  
+  .slider-btn {
+    width: 44px;
+    height: 44px;
+  }
+  
   .about__profiles {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
-    padding-bottom: 1.5rem;
     margin: 0 -1.5rem;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-    /* Reset grid styles */
-    grid-template-columns: none;
-    max-width: 100%;
   }
-
+  
   .profile-card {
     min-width: 260px;
-    scroll-snap-align: center;
-    flex-shrink: 0;
   }
 }
 
 @media (max-width: 640px) {
   .about {
-    padding: 4rem 1.5rem;
+    padding: 4rem 1.5rem 6rem; /* extra padding at bottom for buttons */
   }
 
   .about__grid--top {
@@ -252,6 +349,34 @@ blockquote {
 
   .about__grid--bottom {
     grid-template-columns: 1fr;
+  }
+
+  .slider-container {
+    padding: 0;
+  }
+
+  .about__profiles {
+    padding-bottom: 2.5rem; /* space for scroll dots or just visual separation */
+  }
+
+  .slider-btn {
+    top: auto;
+    bottom: -2rem;
+    transform: none;
+  }
+  
+  .slider-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .slider-btn--left {
+    left: 35%;
+    margin-left: -22px;
+  }
+
+  .slider-btn--right {
+    right: 35%;
+    margin-right: -22px;
   }
 }
 </style>
